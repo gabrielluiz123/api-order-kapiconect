@@ -1,17 +1,16 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const userModel = require("../models/user/user.model")
 
 exports.login = (request, response, next) => {
-    // const password = process.env.password;
-    // const user = process.env.user;
 
-    //pegar credenciais do banco TODO
+    const user = await userModel.find({ username: request.body.user, password: request.body.password == password });
 
-    if (request.body.password == password && request.body.user == user) {
+    if (user) {
         const token = jwt.sign({
-            user: user,
+            user: request.body.user,
         }, process.env.JWT_KEY, {
-            expiresIn: "2h",
+            expiresIn: "4h",
         });
 
         return response.status(200).send({ message: "Autorizado com sucesso!", token: token });
