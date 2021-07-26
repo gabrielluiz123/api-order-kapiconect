@@ -1,4 +1,5 @@
 const orderModel = require("../models/order/order.model");
+const orderService = require("../services/order.service");
 
 exports.listAll = async (request, response, next)  =>  {
     try{
@@ -10,7 +11,7 @@ exports.listAll = async (request, response, next)  =>  {
         delete request.query.page;
         delete request.query.limit;
 
-        const orders = await orderModel.find(request.query).skip(skip).limit(limit);
+        const orders = await orderService.get(request.query, skip, limit);
         if (orders.length < 1) {
             return response.status(204).send({ message: "No orders to return" });     
         }
@@ -26,18 +27,26 @@ exports.listAll = async (request, response, next)  =>  {
     }
 }
 
-exports.getById = (request, response, next) => {
+exports.getById = async (request, response, next) => {
     try{
-        return response.status(200).send({ orders });  
+        const id = request.params.id;
+
+        const order = await orderService.getById(id);
+        if(order.length < 1){
+            return response.status(404).send({ message: "No Order Found!" }); 
+        }
+        return response.status(200).send({ order });  
     }catch(e){
         console.log(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
 
-exports.create = (request, response, next) => {
+exports.create = async (request, response, next) => {
     try{
-        return response.status(200).send({ orders });  
+        const body = request.body;
+        const order = await orderService.post(body);
+        return response.status(201).send({ order });
     }catch(e){
         console.log(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
@@ -45,18 +54,26 @@ exports.create = (request, response, next) => {
 }
 
 
-exports.update = (request, response, next) => {
+exports.update = async (request, response, next) => {
     try{
-        return response.status(200).send({ orders });  
+        const id = request.params.id;
+        const body = request.body;
+
+        const order = await orderService.patch(body, id);
+        return response.status(200).send({ order });  
     }catch(e){
         console.log(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
 
-exports.delete = (request, response, next) => {
+exports.delete = async (request, response, next) => {
     try{
-        return response.status(200).send({ orders });  
+
+        const id = request.params.id;
+
+        const order = await orderService.delete(id);
+        return response.status(200).send({ order });  
     }catch(e){
         console.log(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
