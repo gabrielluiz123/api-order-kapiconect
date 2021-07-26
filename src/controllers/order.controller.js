@@ -31,10 +31,9 @@ exports.listAll = async (request, response, next)  =>  {
 exports.getById = async (request, response, next) => {
     try{
         const id = request.params.id;
-
         const order = await orderService.getById(id);
         if(order.length < 1){
-            return response.status(404).send({ message: "No Order Found!" }); 
+            return response.status(404).send({ message: "Order not Found!" }); 
         }
         return response.status(200).send({ order });  
     }catch(e){
@@ -74,7 +73,6 @@ exports.update = async (request, response, next) => {
 
 exports.delete = async (request, response, next) => {
     try{
-
         const id = request.params.id;
 
         const order = await orderService.delete(id);

@@ -11,8 +11,8 @@ exports.get = async (query, skip, limit) => {
 
 exports.getById = async (id) => {
     try{
-        const orders = await orderModel.find({id});
-        return orders;
+        const orders = await orderModel.find({_id: id});
+        return orders.length > 0 ? orders[0] : orders;
     }catch(e){
         throw Error(e);
     }
