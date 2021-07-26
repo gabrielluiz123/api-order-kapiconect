@@ -1,10 +1,11 @@
 const orderModel = require("../models/order/order.model");
 const orderService = require("../services/order.service");
+const moment = require("moment");
 
 exports.listAll = async (request, response, next)  =>  {
     try{
-        const page = request.query.page;
-        const limit = request.query.limit;
+        const page = request.query.page ? request.query.page : 0;
+        const limit = request.query.limit ? request.query.limit : 50;
 
         let skip = limit * (page - 1);     
 
@@ -44,7 +45,11 @@ exports.getById = async (request, response, next) => {
 
 exports.create = async (request, response, next) => {
     try{
+        const createdAt = moment();
         const body = request.body;
+        body.created_at = createdAt;
+        body.updated_at = createdAt;
+
         const order = await orderService.post(body);
         return response.status(201).send({ order });
     }catch(e){

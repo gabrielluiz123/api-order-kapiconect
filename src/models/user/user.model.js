@@ -3,10 +3,6 @@ const Schema = mongoose.Schema;
 
 
 const schema = new Schema({
-    id: {
-        type: String,
-        required: true
-    },
     username: {
         type: String,
         required: true
@@ -19,7 +15,7 @@ const schema = new Schema({
         type: String,
         required: true
     },
-    created_date: {
+    created_at: {
         type: Date,
         required: true
     },

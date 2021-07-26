@@ -3,10 +3,6 @@ const Schema = mongoose.Schema;
 
 
 const schema = new Schema({
-    id: {
-        type: String,
-        required: true
-    },
     order_number: {
         type: String,
         required: true
@@ -27,7 +23,11 @@ const schema = new Schema({
         type: Number,
         required: true
     },
-    created_date: {
+    created_at: {
+        type: Date,
+        required: true
+    },
+    updated_at: {
         type: Date,
         required: true
     },
