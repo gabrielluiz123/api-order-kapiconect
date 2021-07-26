@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(cors());
-app.use(rateLimiterUsingThirdParty);
+app.use(rateLimiterUsingThirdParty());
 
 app.use(routes);
 

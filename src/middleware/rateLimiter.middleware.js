@@ -2,9 +2,9 @@ const rateLimit = require("express-rate-limit");
 
 module.exports = () => {
     return rateLimiterUsingThirdParty = rateLimit({
-        windowMs: 24 * 60 * 60 * 1000, 
-        max: 100,
-        message: 'You have exceeded the 100 requests in 24 hrs limit!', 
+        windowMs: 60 * 1000, 
+        max: 50,
+        message: 'You have exceeded the 50 requests in 1 minute limit!', 
         headers: true,
       });
 }
