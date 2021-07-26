@@ -1,7 +1,6 @@
 const orderModel = require("../models/order/order.model");
 
 exports.listAll = (request, response, next) => {
-
     try{
         const page = request.query.page;
         const limit = request.query.limit;
