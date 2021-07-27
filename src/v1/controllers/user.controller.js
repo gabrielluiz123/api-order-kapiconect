@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const userService = require("../services/user.service");
-const moment = require("moment");
+const logger = require("../utils/logger");
+
 
 exports.login = async (request, response, next) => {
     try{
@@ -19,7 +20,7 @@ exports.login = async (request, response, next) => {
 
         return response.status(401).send({ message: "Unauthorized!" });
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Error on Authorization!" });
     }
 
@@ -29,20 +30,17 @@ exports.login = async (request, response, next) => {
 exports.register = async (request, response, next) => {
 
     try{
-        const createdAt = moment();
         const body = {
             username: request.body.username,
             password: request.body.password,
-            email: request.body.username,
-            created_at: createdAt,
-            updated_at: createdAt
+            email: request.body.username
         };
 
         const user = await userService.post(body);
 
         return response.status(201).send({ message: "User Registered!", user });
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Error on create User!", error: e.message });
     }
 }

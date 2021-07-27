@@ -17,7 +17,7 @@ exports.listAll = async (request, response, next)  =>  {
             return response.status(204).send({ message: "No orders to return" });     
         }
 
-        const count = await orderModel.count(request.query);
+        const count = await orderModel.countDocuments(request.query);
 
         const pageNumber = Math.ceil(count/parseInt(limit));
         const hasMorePages = pageNumber > page;
@@ -33,7 +33,7 @@ exports.getById = async (request, response, next) => {
     try{
         const id = request.params.id;
         const order = await mongoService.getById(id, orderModel);
-        if(order.length < 1){
+        if(order){
             return response.status(404).send({ message: "Order not Found!" }); 
         }
         return response.status(200).send(order);  

@@ -1,7 +1,6 @@
 const orderModel = require("../../models/order.model");
 const productModel = require("../../models/product.model");
 const mongoService = require("../services/mongo.service");
-const moment = require("moment");
 const logger = require("../utils/logger");
 
 exports.listAll = async (request, response, next)  =>  {
@@ -18,7 +17,7 @@ exports.listAll = async (request, response, next)  =>  {
             return response.status(204).send({ message: "No orders to return" });     
         }
 
-        const count = await orderModel.count(request.query);
+        const count = await orderModel.countDocuments(request.query);
 
         const pageNumber = Math.ceil(count/parseInt(limit));
         const hasMorePages = pageNumber > page;
@@ -34,7 +33,7 @@ exports.getById = async (request, response, next) => {
     try{
         const id = request.params.id;
         const order = await mongoService.getById(id, orderModel);
-        if(order.length < 1){
+        if(order){
             return response.status(404).send({ message: "Order not Found!" }); 
         }
         return response.status(200).send(order);  
@@ -46,10 +45,7 @@ exports.getById = async (request, response, next) => {
 
 exports.create = async (request, response, next) => {
     try{
-        const createdAt = moment();
         const body = request.body;
-        body.created_at = createdAt;
-        body.updated_at = createdAt;
 
         const products = body.products;
 
@@ -85,10 +81,9 @@ exports.create = async (request, response, next) => {
 
 exports.update = async (request, response, next) => {
     try{
-        const updatedAt = moment();
         const id = request.params.id;
         const body = request.body;
-        body.updated_at = updatedAt;
+
         const order = await mongoService.patch(body, id, orderModel);
         return response.status(200).send({ order });  
     } catch(e){

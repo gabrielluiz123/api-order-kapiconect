@@ -1,24 +1,19 @@
 const productModel = require("../../models/product.model");
 const mongoService = require("../services/mongo.service");
-const moment = require("moment");
 const logger = require("../utils/logger");
-
 
 exports.listAll = async (request, response, next)  =>  {
     try{
-        const page = parseInt(request.query.page ? request.query.page : 1);
-        const limit = parseInt(request.query.limit ? request.query.limit : 50);
+        const page = parseInt(request.query.page || 1);
+        const limit = parseInt(request.query.limit || 50);
         let skip = limit * (page - 1);     
-
-        delete request.query.page;
-        delete request.query.limit;
-
-        const products = await mongoService.get(request.query, skip, limit, productModel);
+        const query = {status: request.query.status};
+        const products = await mongoService.get(query, skip, limit, productModel);
         if (products.length < 1) {
             return response.status(204).send({ message: "No products to return" });     
         }
 
-        const count = await productModel.count(request.query);
+        const count = await productModel.countDocuments(request.query);
 
         const pageNumber = Math.ceil(count/parseInt(limit));
         const hasMorePages = pageNumber > page;
@@ -30,103 +25,11 @@ exports.listAll = async (request, response, next)  =>  {
     }
 }
 
-exports.listStock = async (request, response, next)  =>  {
-    try{
-        const page = parseInt(request.query.page ? request.query.page : 1);
-        const limit = parseInt(request.query.limit ? request.query.limit : 50);
-        let skip = limit * (page - 1);     
-
-        delete request.query.page;
-        delete request.query.limit;
-
-        const stocks = await mongoService.get(request.query, skip, limit, productModel);
-        if (stocks.length < 1) {
-            return response.status(204).send({ message: "No stocks to return" });     
-        }
-
-        const count = await productModel.count(request.query);
-
-        const pageNumber = Math.ceil(count/parseInt(limit));
-        const hasMorePages = pageNumber > page;
-
-        return response.status(200).send({ stocks, totalPages: pageNumber, hasMorePages });     
-    }catch(e){
-        logger.error(e);
-        return response.status(500).send({ message: "Internal error when try recovered datas!" });
-    }
-}
-
-exports.updateStock = async (request, response, next) => {
-    try{
-        const updatedAt = moment();
-
-        const id = request.params.id;
-        const available = request.body.available;
-        if(available < 0) {
-            return response.status(422).send({ message: "Stock less than 0!" });
-        }
-        const body = { available };
-        body.updated_at = updatedAt;
-
-        const stock = await mongoService.patch(body, id, productModel);
-        return response.status(200).send({ stock });  
-    }catch(e){
-        logger.error(e);
-        return response.status(500).send({ message: "Internal error when try recovered datas!" });
-    }
-}
-
-exports.listPrice = async (request, response, next)  =>  {
-    try{
-        const page = parseInt(request.query.page ? request.query.page : 1);
-        const limit = parseInt(request.query.limit ? request.query.limit : 50);
-        let skip = limit * (page - 1);     
-
-        delete request.query.page;
-        delete request.query.limit;
-
-        const prices = await mongoService.get(request.query, skip, limit, productModel);
-        if (prices.length < 1) {
-            return response.status(204).send({ message: "No prices to return" });     
-        }
-
-        const count = await productModel.count(request.query);
-
-        const pageNumber = Math.ceil(count/parseInt(limit));
-        const hasMorePages = pageNumber > page;
-
-        return response.status(200).send({ prices, totalPages: pageNumber, hasMorePages });     
-    }catch(e){
-        logger.error(e);
-        return response.status(500).send({ message: "Internal error when try recovered datas!" });
-    }
-}
-
-exports.updatePrice = async (request, response, next) => {
-    try{
-        const updatedAt = moment();
-
-        const id = request.params.id;
-        const price = request.body.price;
-        if(price < 0) {
-            return response.status(422).send({ message: "Price less than 0!" });
-        }
-        const body = { price };
-        body.updated_at = updatedAt;
-
-        const product = await mongoService.patch(body, id, productModel);
-        return response.status(200).send({ product });  
-    }catch(e){
-        logger.error(e);
-        return response.status(500).send({ message: "Internal error when try recovered datas!" });
-    }
-}
-
 exports.getById = async (request, response, next) => {
     try{
         const id = request.params.id;
         const product = await mongoService.getById(id, productModel);
-        if(product.length < 1){
+        if(product){
             return response.status(404).send({ message: "product not Found!" }); 
         }
         return response.status(200).send(product);  
@@ -138,7 +41,6 @@ exports.getById = async (request, response, next) => {
 
 exports.create = async (request, response, next) => {
     try{
-        const createdAt = moment();
         const body = request.body;
 
         const price = request.body.price;
@@ -146,9 +48,6 @@ exports.create = async (request, response, next) => {
         if(price < 0 || stock < 0) {
             return response.status(422).send({ message: "Price or stock less than 0!" });
         }
-
-        body.created_at = createdAt;
-        body.updated_at = createdAt;
 
         const product = await mongoService.post(body, productModel);
         return response.status(201).send({ product });
@@ -161,11 +60,8 @@ exports.create = async (request, response, next) => {
 
 exports.update = async (request, response, next) => {
     try{
-        const updatedAt = moment();
-
         const id = request.params.id;
         const body = request.body;
-        body.updated_at = updatedAt;
 
         const price = request.body.price ? request.body.price : 0;
         const stock = request.body.available ? request.body.available : 0;

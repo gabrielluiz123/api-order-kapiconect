@@ -8,8 +8,8 @@ const productsRoute = require("./products/product.routes");
 
 const routes = express.Router();
 
-routes.use('/v2', productsRoute);
-routes.use('/v2', ordersRoute);
-routes.use('/v2', usersRoute);
+routes.use('/v1', productsRoute);
+routes.use('/v1', ordersRoute);
+routes.use('/v1', usersRoute);
 
 module.exports = routes;

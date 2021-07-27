@@ -9,8 +9,8 @@ exports.get = async (query, skip, limit, model) => {
 
 exports.getById = async (id, model) => {
     try{
-        const result = await model.find({_id: id});
-        return result.length > 0 ? result[0] : result;
+        const result = await model.findById(id);
+        return result;
     }catch(e){
         throw Error(e);
     }
