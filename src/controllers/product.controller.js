@@ -138,6 +138,13 @@ exports.create = async (request, response, next) => {
     try{
         const createdAt = moment();
         const body = request.body;
+
+        const price = request.body.price;
+        const stock = request.body.available;
+        if(price < 0 || stock < 0) {
+            return response.status(422).send({ message: "Price or stock less than 0!" });
+        }
+
         body.created_at = createdAt;
         body.updated_at = createdAt;
 
@@ -157,6 +164,12 @@ exports.update = async (request, response, next) => {
         const id = request.params.id;
         const body = request.body;
         body.updated_at = updatedAt;
+
+        const price = request.body.price ? request.body.price : 0;
+        const stock = request.body.available ? request.body.available : 0;
+        if(price < 0 || stock < 0) {
+            return response.status(422).send({ message: "Price or stock less than 0!" });
+        }
 
         const product = await mongoService.patch(body, id, productModel);
         return response.status(200).send({ product });  
