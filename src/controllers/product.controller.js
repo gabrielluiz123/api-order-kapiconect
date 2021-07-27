@@ -1,6 +1,8 @@
 const productModel = require("../models/product.model");
 const mongoService = require("../services/mongo.service");
 const moment = require("moment");
+const logger = require("../utils/logger");
+
 
 exports.listAll = async (request, response, next)  =>  {
     try{
@@ -23,7 +25,7 @@ exports.listAll = async (request, response, next)  =>  {
 
         return response.status(200).send({ products, totalPages: pageNumber, hasMorePages });     
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -49,7 +51,7 @@ exports.listStock = async (request, response, next)  =>  {
 
         return response.status(200).send({ stocks, totalPages: pageNumber, hasMorePages });     
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -69,7 +71,7 @@ exports.updateStock = async (request, response, next) => {
         const stock = await mongoService.patch(body, id, productModel);
         return response.status(200).send({ stock });  
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -95,7 +97,7 @@ exports.listPrice = async (request, response, next)  =>  {
 
         return response.status(200).send({ prices, totalPages: pageNumber, hasMorePages });     
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -115,7 +117,7 @@ exports.updatePrice = async (request, response, next) => {
         const product = await mongoService.patch(body, id, productModel);
         return response.status(200).send({ product });  
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -127,9 +129,9 @@ exports.getById = async (request, response, next) => {
         if(product.length < 1){
             return response.status(404).send({ message: "product not Found!" }); 
         }
-        return response.status(200).send({ product });  
+        return response.status(200).send(product);  
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -151,7 +153,7 @@ exports.create = async (request, response, next) => {
         const product = await mongoService.post(body, productModel);
         return response.status(201).send({ product });
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -174,7 +176,7 @@ exports.update = async (request, response, next) => {
         const product = await mongoService.patch(body, id, productModel);
         return response.status(200).send({ product });  
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -186,7 +188,7 @@ exports.delete = async (request, response, next) => {
         const product = await mongoService.delete(id, productModel);
         return response.status(200).send({ product });  
     }catch(e){
-        console.log(e);
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }

@@ -2,7 +2,7 @@ const orderModel = require("../models/order.model");
 const productModel = require("../models/product.model");
 const mongoService = require("../services/mongo.service");
 const moment = require("moment");
-const logger = require("../utils/logger")
+const logger = require("../utils/logger");
 
 exports.listAll = async (request, response, next)  =>  {
     try{
@@ -25,7 +25,7 @@ exports.listAll = async (request, response, next)  =>  {
 
         return response.status(200).send({ orders, totalPages: pageNumber, hasMorePages });     
     } catch(e){
-        logger.error(e)
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -37,9 +37,9 @@ exports.getById = async (request, response, next) => {
         if(order.length < 1){
             return response.status(404).send({ message: "Order not Found!" }); 
         }
-        return response.status(200).send({ order });  
+        return response.status(200).send(order);  
     } catch(e){
-        logger.error(e)
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -77,7 +77,7 @@ exports.create = async (request, response, next) => {
 
         return response.status(201).send({ order });
     }catch(e){
-        logger.error(e)
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -92,7 +92,7 @@ exports.update = async (request, response, next) => {
         const order = await mongoService.patch(body, id, orderModel);
         return response.status(200).send({ order });  
     } catch(e){
-        logger.error(e)
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -104,7 +104,7 @@ exports.delete = async (request, response, next) => {
         const order = await mongoService.delete(id, orderModel);
         return response.status(200).send({ order });  
     } catch(e){
-        logger.error(e)
+        logger.error(e);
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
