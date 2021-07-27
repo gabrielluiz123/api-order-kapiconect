@@ -1,4 +1,4 @@
-const orderModel = require("../models/order/order.model");
+const orderModel = require("../models/order.model");
 const mongoService = require("../services/mongo.service");
 const moment = require("moment");
 
@@ -11,7 +11,7 @@ exports.listAll = async (request, response, next)  =>  {
         delete request.query.page;
         delete request.query.limit;
 
-        const orders = await mongoService.get(request.query, skip, limit, orderModel);
+        let orders = await mongoService.get(request.query, skip, limit, orderModel);
         if (orders.length < 1) {
             return response.status(204).send({ message: "No orders to return" });     
         }

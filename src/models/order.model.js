@@ -16,8 +16,8 @@ const schema = new Schema({
         required: true
     },
     user: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     total: {
         type: Number,
@@ -34,7 +34,8 @@ const schema = new Schema({
     products: [
         {
             product_id: {
-                type: String
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product'
             },
             quantity: {
                 type: Number
