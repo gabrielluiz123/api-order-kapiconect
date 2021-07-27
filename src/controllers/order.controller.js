@@ -1,4 +1,5 @@
 const orderModel = require("../models/order.model");
+const productModel = require("../models/product.model");
 const mongoService = require("../services/mongo.service");
 const moment = require("moment");
 
@@ -49,7 +50,30 @@ exports.create = async (request, response, next) => {
         body.created_at = createdAt;
         body.updated_at = createdAt;
 
+        const products = body.products;
+
+
+        let hasStock = true;
+        let productsUpdate = [];
+        for(pct of products) {
+            const product = await mongoService.getById(pct.product_id, productModel);
+            if(product.available < pct.quantity) {   
+                hasStock = false;
+            }
+            productsUpdate.push({ available: product.available, id: product._id, qty: pct.quantity });
+        }
+
+        if(!hasStock){
+            return response.status(422).send({ message: "The order has unavailable products!" });
+        }
+
         const order = await mongoService.post(body, orderModel);
+
+        for(pct of productsUpdate) {
+            const available = pct.available - pct.qty;
+            await mongoService.patch({ available }, pct.id, productModel);
+        }
+
         return response.status(201).send({ order });
     }catch(e){
         console.log(e);

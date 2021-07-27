@@ -1,4 +1,4 @@
-const userModel = require("../models/user/user.model");
+const userModel = require("../models/user.model");
 
 exports.get = async (query) => {
     try{
