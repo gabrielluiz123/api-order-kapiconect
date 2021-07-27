@@ -1,6 +1,8 @@
 const productModel = require("../../models/product.model");
 const mongoService = require("../services/mongo.service");
+const moment = require("moment");
 const logger = require("../utils/logger");
+
 
 exports.listAll = async (request, response, next)  =>  {
     try{
@@ -56,12 +58,15 @@ exports.listStock = async (request, response, next)  =>  {
 
 exports.updateStock = async (request, response, next) => {
     try{
+        const updatedAt = moment();
+
         const id = request.params.id;
         const available = request.body.available;
         if(available < 0) {
             return response.status(422).send({ message: "Stock less than 0!" });
         }
         const body = { available };
+        body.updated_at = updatedAt;
 
         const stock = await mongoService.patch(body, id, productModel);
         return response.status(200).send({ stock });  
@@ -99,12 +104,15 @@ exports.listPrice = async (request, response, next)  =>  {
 
 exports.updatePrice = async (request, response, next) => {
     try{
+        const updatedAt = moment();
+
         const id = request.params.id;
         const price = request.body.price;
         if(price < 0) {
             return response.status(422).send({ message: "Price less than 0!" });
         }
         const body = { price };
+        body.updated_at = updatedAt;
 
         const product = await mongoService.patch(body, id, productModel);
         return response.status(200).send({ product });  
@@ -130,6 +138,7 @@ exports.getById = async (request, response, next) => {
 
 exports.create = async (request, response, next) => {
     try{
+        const createdAt = moment();
         const body = request.body;
 
         const price = request.body.price;
@@ -137,6 +146,9 @@ exports.create = async (request, response, next) => {
         if(price < 0 || stock < 0) {
             return response.status(422).send({ message: "Price or stock less than 0!" });
         }
+
+        body.created_at = createdAt;
+        body.updated_at = createdAt;
 
         const product = await mongoService.post(body, productModel);
         return response.status(201).send({ product });
@@ -149,8 +161,11 @@ exports.create = async (request, response, next) => {
 
 exports.update = async (request, response, next) => {
     try{
+        const updatedAt = moment();
+
         const id = request.params.id;
         const body = request.body;
+        body.updated_at = updatedAt;
 
         const price = request.body.price ? request.body.price : 0;
         const stock = request.body.available ? request.body.available : 0;

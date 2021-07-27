@@ -28,14 +28,6 @@ const schema = new Schema({
         type: Number,
         required: true
     },
-    created_at: {
-        type: Date,
-        required: true
-    },
-    updated_at: {
-        type: Date,
-        required: true
-    },
     products: [
         {
             product_id: {
@@ -50,6 +42,6 @@ const schema = new Schema({
             },
         }
     ]
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Order', schema);

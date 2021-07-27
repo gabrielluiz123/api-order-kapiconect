@@ -26,15 +26,7 @@ const schema = new Schema({
     available: {
         type: Number,
         required: true
-    },
-    created_at: {
-        type: Date,
-        required: true
-    },
-    updated_at: {
-        type: Date,
-        required: true
-    },
-});
+    }
+}, { timestamps: true });
 
 module.exports = mongoose.model('Product', schema);
