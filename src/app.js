@@ -6,12 +6,16 @@ const logMiddleware = require("./v1/middleware/log.middleware")
 
 const routesV1 = require("./v1/routes");
 const routesV2 = require("./v2/routes");
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(cors());
+app.use(cors({
+  origin: ['https:/localhost', 'https://www.google.com/']
+}));
+
 app.use(logMiddleware);
 app.use(rateLimiterUsingThirdParty());
 

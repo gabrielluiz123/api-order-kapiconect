@@ -7,7 +7,7 @@ exports.listAll = async (request, response, next)  =>  {
         const page = parseInt(request.query.page || 1);
         const limit = parseInt(request.query.limit || 50);
         let skip = limit * (page - 1);     
-        const query = {status: request.query.status};
+        const query = {sku: request.query.sku, ean: request.query.ean };
         const products = await mongoService.get(query, skip, limit, productModel);
         if (products.length < 1) {
             return response.status(204).send({ message: "No products to return" });     

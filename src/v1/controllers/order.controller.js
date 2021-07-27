@@ -5,14 +5,13 @@ const logger = require("../utils/logger");
 
 exports.listAll = async (request, response, next)  =>  {
     try{
-        const page = parseInt(request.query.page ? request.query.page : 1);
-        const limit = parseInt(request.query.limit ? request.query.limit : 50);
-        let skip = limit * (page - 1);     
+        const page = parseInt(request.query.page || 1);
+        const limit = parseInt(request.query.limit || 50);
+        let skip = limit * (page - 1);   
 
-        delete request.query.page;
-        delete request.query.limit;
+        const query = {status: request.query.status };
 
-        let orders = await mongoService.get(request.query, skip, limit, orderModel);
+        let orders = await mongoService.get(query, skip, limit, orderModel);
         if (orders.length < 1) {
             return response.status(204).send({ message: "No orders to return" });     
         }
