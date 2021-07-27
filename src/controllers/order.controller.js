@@ -2,13 +2,14 @@ const orderModel = require("../models/order.model");
 const productModel = require("../models/product.model");
 const mongoService = require("../services/mongo.service");
 const moment = require("moment");
+const logger = require("../utils/logger")
 
 exports.listAll = async (request, response, next)  =>  {
     try{
         const page = parseInt(request.query.page ? request.query.page : 1);
         const limit = parseInt(request.query.limit ? request.query.limit : 50);
         let skip = limit * (page - 1);     
-        console.log(fasduih)
+
         delete request.query.page;
         delete request.query.limit;
 
@@ -23,8 +24,8 @@ exports.listAll = async (request, response, next)  =>  {
         const hasMorePages = pageNumber > page;
 
         return response.status(200).send({ orders, totalPages: pageNumber, hasMorePages });     
-    }catch(e){
-        console.log(e);
+    } catch(e){
+        logger.error(e)
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -37,8 +38,8 @@ exports.getById = async (request, response, next) => {
             return response.status(404).send({ message: "Order not Found!" }); 
         }
         return response.status(200).send({ order });  
-    }catch(e){
-        console.log(e);
+    } catch(e){
+        logger.error(e)
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -76,7 +77,7 @@ exports.create = async (request, response, next) => {
 
         return response.status(201).send({ order });
     }catch(e){
-        console.log(e);
+        logger.error(e)
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -90,8 +91,8 @@ exports.update = async (request, response, next) => {
         body.updated_at = updatedAt;
         const order = await mongoService.patch(body, id, orderModel);
         return response.status(200).send({ order });  
-    }catch(e){
-        console.log(e);
+    } catch(e){
+        logger.error(e)
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
@@ -102,8 +103,8 @@ exports.delete = async (request, response, next) => {
 
         const order = await mongoService.delete(id, orderModel);
         return response.status(200).send({ order });  
-    }catch(e){
-        console.log(e);
+    } catch(e){
+        logger.error(e)
         return response.status(500).send({ message: "Internal error when try recovered datas!" });
     }
 }
