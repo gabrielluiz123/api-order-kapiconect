@@ -15,6 +15,11 @@ const schema = new Schema({
         type: String,
         required: true
     },
+    status: {
+        type: String,
+        enum: ['openned', 'invoiced', 'separation', 'canceled', 'closed'],
+        required: true
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
