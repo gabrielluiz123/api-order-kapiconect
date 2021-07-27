@@ -1,10 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const rateLimiterUsingThirdParty  = require("./middleware/rateLimiter.middleware");
-const logMiddleware = require("./middleware/log.middleware")
+const rateLimiterUsingThirdParty  = require("./v1/middleware/rateLimiter.middleware");
+const logMiddleware = require("./v1/middleware/log.middleware")
 
-const routes = require("./routes");
+const routes = require("./v1/routes");
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
