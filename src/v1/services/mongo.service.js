@@ -1,5 +1,6 @@
 exports.get = async (query, skip, limit, model) => {
     try{
+        console.log(query)
         const result = await model.find(query).skip(skip).limit(limit);
         return result;
     }catch(e){
