@@ -1,7 +1,7 @@
 const orderModel = require("../../models/order.model");
 const productModel = require("../../models/product.model");
 const mongoService = require("../services/mongo.service");
-const logger = require("../utils/logger");
+const logger = require("../../utils/logger");
 
 exports.listAll = async (request, response, next)  =>  {
     try{

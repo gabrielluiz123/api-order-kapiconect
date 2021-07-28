@@ -1,6 +1,6 @@
 const productModel = require("../../models/product.model");
 const mongoService = require("../services/mongo.service");
-const logger = require("../utils/logger");
+const logger = require("../../utils/logger");
 
 exports.listStock = async (request, response, next)  =>  {
     try{

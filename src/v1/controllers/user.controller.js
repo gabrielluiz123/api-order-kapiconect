@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const mongoService = require("../services/mongo.service");
 const userModel = require("../../models/user.model");
-const logger = require("../utils/logger");
+const logger = require("../../utils/logger");
 
 
 exports.login = async (request, response, next) => {
