@@ -9,7 +9,7 @@ exports.listAll = async (request, response, next)  =>  {
         const limit = parseInt(request.query.limit || 50);
         let skip = limit * (page - 1);   
 
-        const query = {status: request.query.status };
+        const query = { status: request.query.status };
 
         let orders = await mongoService.get(query, skip, limit, orderModel);
         if (orders.length < 1) {
@@ -32,13 +32,13 @@ exports.getById = async (request, response, next) => {
     try{
         const id = request.params.id;
         const order = await mongoService.getById(id, orderModel);
-        if(order){
+        if(!order){
             return response.status(404).send({ message: "Order not Found!" }); 
         }
         return response.status(200).send(order);  
     } catch(e){
         logger.error(e);
-        return response.status(500).send({ message: "Internal error when try recovered datas!" });
+        return response.status(500).send({ message: "Internal error when try recovered data!" });
     }
 }
 
@@ -70,10 +70,10 @@ exports.create = async (request, response, next) => {
             await mongoService.patch({ available }, pct.id, productModel);
         }
 
-        return response.status(201).send({ order });
+        return response.status(201).send(order);
     }catch(e){
         logger.error(e);
-        return response.status(500).send({ message: "Internal error when try recovered datas!" });
+        return response.status(500).send({ message: "Internal error when try create order!" });
     }
 }
 
@@ -81,13 +81,13 @@ exports.create = async (request, response, next) => {
 exports.update = async (request, response, next) => {
     try{
         const id = request.params.id;
-        const body = request.body;
+        const body = { status: request.body.status };
 
         const order = await mongoService.patch(body, id, orderModel);
-        return response.status(200).send({ order });  
+        return response.status(200).send(order);  
     } catch(e){
         logger.error(e);
-        return response.status(500).send({ message: "Internal error when try recovered datas!" });
+        return response.status(500).send({ message: "Internal error when try update order!" });
     }
 }
 
@@ -96,9 +96,9 @@ exports.delete = async (request, response, next) => {
         const id = request.params.id;
 
         const order = await mongoService.delete(id, orderModel);
-        return response.status(200).send({ order });  
+        return response.status(200).send(order);  
     } catch(e){
         logger.error(e);
-        return response.status(500).send({ message: "Internal error when try recovered datas!" });
+        return response.status(500).send({ message: "Internal error when try delete order!" });
     }
 }

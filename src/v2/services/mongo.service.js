@@ -1,7 +1,16 @@
-exports.get = async (query, skip, limit, model) => {
+exports.get = async (query={}, skip, limit, model) => {
     try{
         const result = await model.find(query).skip(skip).limit(limit);
         return result;
+    }catch(e){
+        throw Error(e);
+    }
+}
+
+exports.getUser = async (query, model) => {
+    try{
+        const users = await model.find(query);
+        return users[0];
     }catch(e){
         throw Error(e);
     }

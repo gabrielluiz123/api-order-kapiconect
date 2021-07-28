@@ -16,7 +16,7 @@ exports.listPrice = async (request, response, next)  =>  {
             return response.status(204).send({ message: "No prices to return" });     
         }
 
-        const count = await productModel.countDocuments(request.query);
+        const count = await productModel.countDocuments(query);
 
         const pageNumber = Math.ceil(count/parseInt(limit));
         const hasMorePages = pageNumber > page;
@@ -38,9 +38,9 @@ exports.updatePrice = async (request, response, next) => {
         const body = { price };
 
         const product = await mongoService.patch(body, id, productModel);
-        return response.status(200).send({ product });  
+        return response.status(200).send(product);  
     }catch(e){
         logger.error(e);
-        return response.status(500).send({ message: "Internal error when try recovered datas!" });
+        return response.status(500).send({ message: "Internal error when try to update price!" });
     }
 }
