@@ -16,7 +16,7 @@ exports.listStock = async (request, response, next)  =>  {
             return response.status(204).send({ message: "No stocks to return" });     
         }
 
-        const count = await productModel.countDocuments(request.query);
+        const count = await productModel.countDocuments(query);
 
         const pageNumber = Math.ceil(count/parseInt(limit));
         const hasMorePages = pageNumber > page;
@@ -38,9 +38,9 @@ exports.updateStock = async (request, response, next) => {
         const body = { available };
 
         const stock = await mongoService.patch(body, id, productModel);
-        return response.status(200).send({ stock });  
+        return response.status(200).send(stock);  
     }catch(e){
         logger.error(e);
-        return response.status(500).send({ message: "Internal error when try recovered datas!" });
+        return response.status(500).send({ message: "Internal error when try to update stock!" });
     }
 }

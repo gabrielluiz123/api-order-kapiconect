@@ -6,11 +6,10 @@ const logger = require("../utils/logger");
 
 exports.login = async (request, response, next) => {
     try{
-        const user = await userService.get({ username: request.body.user, password: request.body.password });
-
+        const user = await userService.get({ username: request.body.username, password: request.body.password });
         if (user) {
             const token = jwt.sign({
-                user: request.body.user,
+                user: request.body.username,
             }, process.env.JWT_KEY, {
                 expiresIn: "4h",
             });
@@ -23,8 +22,6 @@ exports.login = async (request, response, next) => {
         logger.error(e);
         return response.status(500).send({ message: "Error on Authorization!" });
     }
-
-    
 }
 
 exports.register = async (request, response, next) => {
