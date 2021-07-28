@@ -38,6 +38,9 @@ exports.updateStock = async (request, response, next) => {
         const body = { available };
 
         const stock = await mongoService.patch(body, id, productModel);
+        if(!stock) {
+            return response.status(404).send({ message: "Product not Found!" });
+        }
         return response.status(200).send(stock);  
     }catch(e){
         logger.error(e);

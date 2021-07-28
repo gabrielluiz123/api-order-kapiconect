@@ -11,6 +11,7 @@ mongoose.connect(uri, {
 })
     .then(() => {
         logger.info(`🚀 MongoDB connected...!`);
+
     })
     .catch(err => console.log(err))
 

@@ -38,6 +38,9 @@ exports.updatePrice = async (request, response, next) => {
         const body = { price };
 
         const product = await mongoService.patch(body, id, productModel);
+        if(!product) {
+            return response.status(404).send({ message: "Product not Found!" });
+        }
         return response.status(200).send(product);  
     }catch(e){
         logger.error(e);

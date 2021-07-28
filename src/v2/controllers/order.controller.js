@@ -84,6 +84,9 @@ exports.update = async (request, response, next) => {
         const body = { status: request.body.status };
 
         const order = await mongoService.patch(body, id, orderModel);
+        if(!order) {
+            return response.status(404).send({ message: "Order not Found!" });
+        }
         return response.status(200).send(order);  
     } catch(e){
         logger.error(e);
@@ -96,6 +99,9 @@ exports.delete = async (request, response, next) => {
         const id = request.params.id;
 
         const order = await mongoService.delete(id, orderModel);
+        if(!order) {
+            return response.status(404).send({ message: "Order not Found!" });
+        }
         return response.status(200).send(order);  
     } catch(e){
         logger.error(e);
