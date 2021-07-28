@@ -65,7 +65,9 @@ exports.getById = async (request, response, next) => {
     try{ 
         const id = request.params.id;
         const user = await mongoService.getById(id, userModel);
-
+        if(!user) {
+            return response.status(404).send({ message: "User not Found!" });
+        }
         return response.status(200).send(user);
     }catch(e){
         logger.error(e);
@@ -78,7 +80,9 @@ exports.update = async (request, response, next) => {
         const id = request.params.id;
         const body = { username: request.body.username, email: request.body.username };
         const user = await mongoService.patch(body, id, userModel);
-
+        if(!user) {
+            return response.status(404).send({ message: "User not Found!" });
+        }
         return response.status(200).send(user);
     }catch(e){
         logger.error(e);
@@ -90,7 +94,9 @@ exports.delete = async (request, response, next) => {
     try{ 
         const id = request.params.id;
         const user = await mongoService.delete(id, userModel);
-
+        if(!user) {
+            return response.status(404).send({ message: "User not Found!" });
+        }
         return response.status(200).send(user);
     }catch(e){
         logger.error(e);

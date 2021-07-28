@@ -77,6 +77,9 @@ exports.update = async (request, response, next) => {
         }
 
         const product = await mongoService.patch(body, id, productModel);
+        if(!product) {
+            return response.status(404).send({ message: "Product not Found!" });
+        }
         return response.status(200).send({ product });  
     }catch(e){
         logger.error(e);
@@ -89,6 +92,9 @@ exports.delete = async (request, response, next) => {
         const id = request.params.id;
 
         const product = await mongoService.delete(id, productModel);
+        if(!product) {
+            return response.status(404).send({ message: "Product not Found!" });
+        }
         return response.status(200).send(product);  
     }catch(e){
         logger.error(e);
