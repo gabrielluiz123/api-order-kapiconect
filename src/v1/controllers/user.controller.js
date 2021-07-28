@@ -97,7 +97,7 @@ exports.delete = async (request, response, next) => {
         if(!user) {
             return response.status(404).send({ message: "User not Found!" });
         }
-        return response.status(200).send(user);
+        return response.status(200).send(true);
     }catch(e){
         logger.error(e);
         return response.status(500).send({ message: "Error on delete User!"});

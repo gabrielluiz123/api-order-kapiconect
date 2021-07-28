@@ -95,7 +95,7 @@ exports.delete = async (request, response, next) => {
         if(!product) {
             return response.status(404).send({ message: "Product not Found!" });
         }
-        return response.status(200).send(product);  
+        return response.status(200).send(true);  
     }catch(e){
         logger.error(e);
         return response.status(500).send({ message: "Internal error when try to delete product!" });
