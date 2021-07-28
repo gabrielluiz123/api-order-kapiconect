@@ -16,7 +16,7 @@ exports.listAll = async (request, response, next)  =>  {
             return response.status(204).send({ message: "No orders to return" });     
         }
 
-        const count = await orderModel.countDocuments(request.query);
+        const count = await orderModel.countDocuments(query);
 
         const pageNumber = Math.ceil(count/parseInt(limit));
         const hasMorePages = pageNumber > page;
@@ -47,7 +47,6 @@ exports.create = async (request, response, next) => {
         const body = request.body;
 
         const products = body.products;
-
 
         let hasStock = true;
         let productsUpdate = [];
